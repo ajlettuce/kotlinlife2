@@ -11,7 +11,6 @@ class Life(var alive: MutableList<Pos>) {
     fun getPopulation(): Int{
         return alive.size
     }
-    //test
     private fun addToNeighbors(id : Pos, list : MutableMap<Pos,Int>) { //slow for some reason
         for(i in nums) {
             val newPos = id + i
