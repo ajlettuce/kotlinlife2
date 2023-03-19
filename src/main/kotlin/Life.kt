@@ -1,41 +1,32 @@
-class Life(var alive: List<Pos>) {
-    private var state = mapOf<Pos, Int>()
-    private var fstate = mutableMapOf<Pos, Int>()
-    private var falive = mutableListOf<Pos>()
+import java.util.concurrent.ConcurrentHashMap
+
+class Life(alive: List<Pos>) {
+    var currentState = mutableSetOf<Pos>()
+    var lastState = setOf<Pos>()
 
     init {
-        val s = mutableMapOf<Pos, Int>()
-        for (i in alive)
-            add2Neighbors(i, s)
-        state = s
-    }
-
-
-    private fun add2Neighbors(id: Pos, list: MutableMap<Pos, Int>) { //way more efficient lol
-        list[id + Pos(-1, -1)] = list[id + Pos(-1, -1)]?.plus(1) ?: 1
-        list[id + Pos(-1, 0)] = list[id + Pos(-1, 0)]?.plus(1) ?: 1
-        list[id + Pos(-1, 1)] = list[id + Pos(-1, 1)]?.plus(1) ?: 1
-        list[id + Pos(0, -1)] = list[id + Pos(0, -1)]?.plus(1) ?: 1
-        list[id + Pos(0, 1)] = list[id + Pos(0, 1)]?.plus(1) ?: 1
-        list[id + Pos(1, -1)] = list[id + Pos(1, -1)]?.plus(1) ?: 1
-        list[id + Pos(1, 0)] = list[id + Pos(1, 0)]?.plus(1) ?: 1
-        list[id + Pos(1, 1)] = list[id + Pos(1, 1)]?.plus(1) ?: 1
+        lastState = alive.toSet()
     }
 
     fun nextGen() {
-        for ((k, v) in state) {
-            if (v == 3) {
-                falive.add(k)
-                add2Neighbors(k, fstate)
-            } else if (v == 2 && alive.contains(k)) {
-                falive.add(k)
-                add2Neighbors(k, fstate)
+        currentState.clear()
+
+        val neighbors = ConcurrentHashMap<Pos, Int>()
+        lastState.forEach { pos ->
+            for (x in -1..1) {
+                for (y in -1..1) {
+                    if (x == 0 && y == 0) continue
+                    val neighbor = pos + Pos(x, y)
+                    neighbors[neighbor] = neighbors.getOrDefault(neighbor, 0) + 1
+                }
             }
         }
-        //tested, this is the most efficient:
-        alive = falive
-        falive = mutableListOf()
-        state = fstate
-        fstate = mutableMapOf()
+
+        for ((pos, num) in  neighbors) {
+            if (num == 3 || (num == 2 && lastState.contains(pos)))
+                currentState.add(pos)
+        }
+
+        lastState = currentState.toSet()
     }
 }
