@@ -4,9 +4,8 @@ fun main() {
     println(game.alive)
     val t1 = System.currentTimeMillis()
     for (i in 0..5206) {
-        println("gen $i")
         game.nextGen()
     }
     println("Completed in ${(System.currentTimeMillis() - t1) / 1000f} seconds")
-    println("population ${game.getPopulation()}")
+    println("population ${game.alive.size}")
 } 
