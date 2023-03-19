@@ -6,5 +6,5 @@ fun main() {
         game.nextGen()
     }
     println("Completed in ${(System.currentTimeMillis() - t1) / 1000f} seconds")
-    println("population ${game.currentState.size}")
+    println("population ${game.nextState.size}")
 } 

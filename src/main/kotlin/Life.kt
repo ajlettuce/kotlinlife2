@@ -1,16 +1,16 @@
 class Life(alive: List<Pos>) {
-    var currentState = mutableSetOf<Pos>()
-    private var lastState = setOf<Pos>()
+    private var state = setOf<Pos>()
+    var nextState = mutableSetOf<Pos>()
 
     init {
-        lastState = alive.toSet()
+        state = alive.toSet()
     }
 
     fun nextGen() {
-        currentState = mutableSetOf()
+        nextState = mutableSetOf()
         val neighbors = mutableMapOf<Pos, Int>()
 
-        lastState.forEach { pos ->
+        state.forEach { pos ->
             for (x in -1..1) {
                 for (y in -1..1) {
                     if (x == 0 && y == 0) continue
@@ -21,10 +21,9 @@ class Life(alive: List<Pos>) {
         }
 
         for ((pos, num) in  neighbors) {
-            if (num == 3 || (num == 2 && lastState.contains(pos)))
-                currentState.add(pos)
+            if (num == 3 || (num == 2 && state.contains(pos)))
+                nextState.add(pos)
         }
-
-        lastState = currentState
+        state = nextState
     }
 }
