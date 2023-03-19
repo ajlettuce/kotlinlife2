@@ -1,17 +1,15 @@
-import java.util.concurrent.ConcurrentHashMap
-
 class Life(alive: List<Pos>) {
     var currentState = mutableSetOf<Pos>()
-    var lastState = setOf<Pos>()
+    private var lastState = setOf<Pos>()
 
     init {
         lastState = alive.toSet()
     }
 
     fun nextGen() {
-        currentState.clear()
+        currentState = mutableSetOf()
+        val neighbors = mutableMapOf<Pos, Int>()
 
-        val neighbors = ConcurrentHashMap<Pos, Int>()
         lastState.forEach { pos ->
             for (x in -1..1) {
                 for (y in -1..1) {
@@ -27,6 +25,6 @@ class Life(alive: List<Pos>) {
                 currentState.add(pos)
         }
 
-        lastState = currentState.toSet()
+        lastState = currentState
     }
 }
