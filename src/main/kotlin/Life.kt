@@ -1,7 +1,5 @@
 class Life(var alive: MutableList<Pos>) {
-
     val nums = listOf(Pos(-1,-1),Pos(-1,0),Pos(-1,1),Pos(0,-1),Pos(0,1),Pos(1,-1),Pos(1,0),Pos(1,1))
-
     var state = mutableMapOf<Pos,Int>()
     var fstate = mutableMapOf<Pos,Int>()
     var falive = mutableListOf<Pos> ()
@@ -10,14 +8,14 @@ class Life(var alive: MutableList<Pos>) {
             add2Neighbors(i,state)
     }
 
-    private fun addToNeighbors(id : Pos, list : MutableMap<Pos,Int>) {
+    private fun addToNeighbors(id : Pos, list : MutableMap<Pos,Int>) { //slow for some reason
         for(i in nums) {
             val newPos = id + i
             list[newPos] = list[newPos]?.plus(1) ?: 1
         }
     }
 
-    private fun add2Neighbors(id : Pos, list : MutableMap<Pos, Int>) {
+    private fun add2Neighbors(id : Pos, list : MutableMap<Pos, Int>) { //way more efficient lol
         list[id + Pos(-1,-1)] = list[id + Pos(-1,-1)]?.plus(1) ?: 1
         list[id + Pos(-1,0)] = list[id + Pos(-1,0)]?.plus(1) ?: 1
         list[id + Pos(-1,1)] = list[id + Pos(-1,1)]?.plus(1) ?: 1
@@ -38,9 +36,10 @@ class Life(var alive: MutableList<Pos>) {
                 add2Neighbors(k,fstate)
             }
         }
+        //tested, this is the most efficent:
         alive = falive.toMutableList()
         falive = mutableListOf()
-        state = fstate.toMutableMap()
+        state = fstate
         fstate = mutableMapOf()
     }
 }
