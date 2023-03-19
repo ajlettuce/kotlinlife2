@@ -1,5 +1,5 @@
 @JvmInline
-value class Pos(val pos: Long) {
+value class Pos(private val pos: Long) {
     constructor(x: Int, y: Int) : this((x.toLong() shl 32) or (y.toLong() and 0xffffffffL))
 
     private val x: Int
